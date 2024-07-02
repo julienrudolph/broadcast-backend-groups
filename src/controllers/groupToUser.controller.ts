@@ -3,8 +3,8 @@ import * as GroupToUserRepo from "../repositories/groupToUser.repo";
 import * as util from '../utils/app.utils';
 import {Group, GroupToUser} from '../models';
 
-// let bearer:string = process.env.GROUP_AUTH
-let bearer = 'abcdefg'
+let bearer:string ='Bearer ' + process.env.GROUP_AUTH
+// let bearer = 'abcdefg'
 
 
 @Route("groupToUser")

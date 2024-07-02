@@ -15,14 +15,13 @@ import * as apputils from '../utils/app.utils';
 import { BotUser, Channel, ChannelToUser, BroadCast, Whitelist, Group, GroupToUser } from '../models';
 
 import { IScimUserResponse, IBroadCast, IMessage } from '../interfaces/interfaces';
-import { StringRegexOptions } from "joi";
 
-// let admins = process.env.ADMINS;
-let admins = "4dfc5c70-dcc8-4d9e-82be-a3cbe6661107"
+let admins = process.env.ADMINS;
+// let admins = "4dfc5c70-dcc8-4d9e-82be-a3cbe6661107"
 let appKey = process.env.APPKEY;
-// let bearer = "Bearer " + process.env.BEARER;
+let bearer = "Bearer " + process.env.BEARER;
 let romanBase = process.env.ROMAN_BASE;
-let bearer = "Bearer abcdefg"
+// let bearer = "Bearer abcdefg"
 @Route("roman")
 @Tags("Roman")
 export default class RomanController {
