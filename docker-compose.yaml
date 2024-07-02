@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  #pgadmin:
+  #  image: dpage/pgadmin4
+  #  container_name: pgadmin4_container
+  #  restart: always
+  #  ports:
+  #    - "8123:80"
+  #  environment:
+  #    - PGADMIN_DEFAULT_EMAIL=admin@local.com
+  #    - PGADMIN_DEFAULT_PASSWORD=postgres
+  #  networks:
+  #    - broadcast-bot
+  # each bot has its own database
+  db:
+    image: postgres:latest
+    container_name: psql_database
+    restart: unless-stopped
+    networks:
+      - broadcast
+    environment:
+      - PGUSER=admin
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - /var/lib/postgresql/data
+    env_file: .env
+  app:
+    image: bot-backend-dev:dev01
+    container_name: bot01-dev
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+    networks:
+      - broadcast
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+    env_file: .env
+networks:
+  broadcast:
+    name: botnet
+    external: true
+#volumes:
+#  db:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: /Users/julien.rudolph/dev/wire/buero_warken/
