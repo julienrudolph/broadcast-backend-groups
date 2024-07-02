@@ -18,6 +18,9 @@ export class Group {
   @Column()
   name!: string;
 
+  @Column()
+  displayName?: string;
+
   @CreateDateColumn()
   createdAt?: Date;
 
