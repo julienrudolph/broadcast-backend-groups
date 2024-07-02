@@ -124,7 +124,6 @@ export default class RomanController {
     Logger.logInfo("handleText");
     const {text, userId , messageId} = body;
     const messageText:string = text?.data ?? '';
-    console.log(messageText);
     if(isAdmin){
       if(messageText.match(/^\/list\s\d+$/)){
         let count = messageText.split(" ")[1];
@@ -190,7 +189,6 @@ export default class RomanController {
       }else if(messageText.match("^\/[a-zA-Z0-9]*")){
         let tmp:string[] = messageText.split(" ");
         let groupName:string = tmp[0].substring(1,tmp[0].length);
-        console.log("Groupname: " + groupName);
         if(groupName) {
           let group = await GroupRepo.getGroupByName(groupName);
           if(group){
@@ -250,7 +248,6 @@ export default class RomanController {
               });
             }
         }));
-        console.log(result);
         Promise.all(
           result.map(async (elem) => {
             await this.groupBroadcast(message, elem.userToken, elem.conversationId);
