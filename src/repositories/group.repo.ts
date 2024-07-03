@@ -16,8 +16,21 @@ import { Group } from '../models/group';
     });
   };
 
-  export const updateGroup = async (newGroup: Group):Promise<Group> => {
-    return null;
+  export const updateGroup = async (groupName?: string, newDisplayName?: string, newName?:string):Promise<Group | string> => {
+    const groupRepository = connectDB.getRepository(Group);
+    let group:Group = groupRepository.findOne({where: {name: groupName}});
+    if(group){
+      if(newDisplayName){
+        group.displayName = newDisplayName;
+      }
+      if(newName){
+        group.name = newName;
+      }
+      return groupRepository.save(group);
+    }else{
+      return "error_group_not_found";
+    }
+    
   }
 
   export const getGroupById = async (id: number): Promise<Group | null> => {

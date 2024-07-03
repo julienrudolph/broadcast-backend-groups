@@ -8,7 +8,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     return groupToUserRepo.find();
   };
 
-  export const getAllUserByGroupName = async (groupName: string): Promise<Array<GroupToUser>> => {
+  export const getAllUserByGroupName = async (groupName: string): Promise<Array<GroupToUser> | string> => {
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     let group:Group = await groupRepo.getGroupByName(groupName);
     if(group){
@@ -16,14 +16,14 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
       if(members && members.length > 0){
         return members;
       }else{
-        return [];
+        return "error_no_members_found";
       }
     }else{
-      return [];
+      return "error_no_group_found";
     }
   }
 
-  export const getAllGroupsByUserEmail = async(mail: string):Promise<any> => {
+  export const getAllGroupsByUserEmail = async(mail: string):Promise<Array<GroupToUser> | string> => {
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
@@ -36,7 +36,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
       .distinctOn(['GroupToUser.groupId'])
       .getMany();
     }else{
-      return "401 - user not found"
+      return "error_user_not_found";
     }
   }
 
@@ -49,7 +49,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     });
   };
 
-  export const addUserToGroupByEmail = async(userMail:string, groupName:string):Promise<any> => {
+  export const addUserToGroupByEmail = async(userMail:string, groupName:string):Promise<GroupToUser | string> => {
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
@@ -63,11 +63,11 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
         groupId: group.id
       });
     }else{
-      return "404 - user or group not found";
+      return "error_user_or_group_not_found";
     }
   }
 
-  export const removeUserFromGroupByEmail = async(mail: string, groupName: string):Promise<any> => {
+  export const removeUserFromGroupByEmail = async(mail: string, groupName: string):Promise<GroupToUser | string> => {
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
@@ -82,11 +82,11 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     if(groupToUser){
       return await groupToUserRepo.remove(groupToUser);
     }else{
-      return "401 - error user or group not found";
+      return "error_user_or_group_not_found";
     }
   }
 
-  export const removeUserFromAllGroups = async (mail:string):Promise<any> => {
+  export const removeUserFromAllGroups = async (mail:string):Promise<Array<GroupToUser> | string> => {
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
@@ -96,11 +96,11 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     if(groupToUser){
       return groupToUserRepo.remove(groupToUser);
     }else{
-      return "401 - user not found"
+      return "error_user_or_group_not_found"
     }
  }
 
-  export const addUserToGroupByUserId = async(userId: number, groupName:string):Promise<any> => {
+  export const addUserToGroupByUserId = async(userId: number, groupName:string):Promise<GroupToUser | string> => {
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
@@ -114,7 +114,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
         groupId: group.id
       });
     }else{
-      return "404 - user or group not found";
+      return "error_user_or_group_not_found";
     }  
   }
 

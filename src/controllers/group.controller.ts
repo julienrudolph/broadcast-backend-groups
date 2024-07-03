@@ -28,6 +28,15 @@ export default class GroupController {
     }
   }
 
+  @Post("/updateGroup")
+  public async updateGroup(@Header() header:any, @Body() body:any):Promise<any>{
+    if(this.isAuthenticated(header.authorization)){
+      return await GroupRepo.updateGroup(body.groupName, body.newDisplayname, body.newName);
+    }else{
+      return "401 - unauthorized"
+    }
+  }
+
   @Post("/addGroup")
   public async addGroup(@Header() header:any, @Body() body:any):Promise<any>{
     if(this.isAuthenticated(header.authorization)){

@@ -16,7 +16,7 @@ export default class WhitelistController {
   }
 
   @Get("/")
-  public async getWhitelist(@Header() header:any): Promise<any> {
+  public async getWhitelist(@Header() header:any): Promise<Whitelist | string> {
     if(this.isAuthenticated(header.authorization)){
       // do stuff;
       let whitelist = await WhitelistRepo.getWhitelist();
@@ -30,7 +30,7 @@ export default class WhitelistController {
         }
       }
     }else{
-      return "Unauthorized";
+      return "error_not_authenticated";
     }
   }
 
@@ -59,7 +59,7 @@ export default class WhitelistController {
         return "error_input";
       }
     }else{
-      return "Unauthorized";
+      return "error_not_authenticated";
     }
   } 
 
@@ -103,7 +103,7 @@ export default class WhitelistController {
         return "error_input";
       }
     }else{
-      return "Unauthorized";
+      return "error_not_authenticated";
     }
   }
 }
