@@ -152,6 +152,7 @@ export default class RomanController {
       else if(messageText.startsWith("/help")){
         return ({type: 'text', text: {data :  "**/help** - zeigt die Liste der Kommandos an\n " +
                                               "**/broadcast** <Nachricht> - erzeugt eine Broadcast Nachricht\n" +
+                                              "**/groups** - zeigt alle verfügbaren Gruppen an\n" +
                                               "**/info** - zeigt Informationen über den Kanal\n" + 
                                               "**/list** - zeigt Informationen der letzten 20 Broadcasts an\n" +
                                               "**/list** <Anzahl> - zeigt Informationen für die letzten <Anzahl> Broadcasts an\n" +
@@ -161,6 +162,28 @@ export default class RomanController {
                                               "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform)."
                                       }
                 });        
+      }else if(messageText.startsWith("/groups")){
+        let groups = await this.getGroups();
+        console.log(groups);
+        if(groups && groups.length > 0){
+          let message:String = "";
+          message = "Anzahl Gruppen: " + groups.length + "\n\n";
+          groups.map(elem => {
+            message = message + "**/" + elem.name + "**" 
+          }); 
+          message = message + "\n\n Nutzne Sie **/Gruppenname <Nachricht>** um eine Nachricht an alle Gruppenmitglieder zu versenden." 
+          return ({type: 'text',
+                    text: {
+                      data: message
+                    }
+                  });
+        }else{
+          return ({type: 'text',
+            text: {
+              data: "Keine Gruppen gefunden."
+            }
+          });
+        }
       }
       else if(messageText.startsWith("/info")){
         return ({type: 'text', text: {data: "Sie befinden sich im Kanal: " + process.env.CHANNEL_NAME + ". Sie sind Broadcaster."}});
@@ -190,10 +213,11 @@ export default class RomanController {
         let groupName:string = tmp[0].substring(1,tmp[0].length);
         if(groupName) {
           let group = await GroupRepo.getGroupByName(groupName);
+          console.log(group);
           if(group){
             return this.handleGroupMessage(messageText.substring(groupName.length+2, messageText.length), group, appKey, userId);
           }else{
-            return "Die Gruppe konnte nicht gefunden werden. Nutzen Sie **/groups** um sich alle Gruppen anzeigen zu lassen."
+            return ({type: 'text', text: {data:"Die Gruppe konnte nicht gefunden werden. Nutzen Sie **/groups** um sich alle Gruppen anzeigen zu lassen."}});
           }
         }        
       }
@@ -228,6 +252,15 @@ export default class RomanController {
         }  
       }
     } 
+  }
+
+  private async getGroups(){
+    const groups:Group[] = await GroupRepo.getGroups();
+    if(groups){
+      return groups;
+    }else{
+      return [];
+    }
   }
 
   private async handleGroupMessage(message: string, group: Group, appKey: string, userId: string){
