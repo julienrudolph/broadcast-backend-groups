@@ -1,5 +1,5 @@
 import express from "express";
-import GroupToUserController from "../controllers/grouptoUser.controller";
+import GroupToUserController from "../controllers/groupToUser.controller";
 
 const groupToUserRouter = express.Router();
 

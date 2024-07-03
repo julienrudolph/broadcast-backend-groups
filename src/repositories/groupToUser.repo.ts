@@ -8,7 +8,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     return groupToUserRepo.find();
   };
 
-  export const getAllUserByGroupName = async (groupName: string): Promise<Array<GroupToUser> | string> => {
+  export const getAllUserByGroupName = async (groupName: string): Promise<any> => {
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     let group:Group = await groupRepo.getGroupByName(groupName);
     if(group){

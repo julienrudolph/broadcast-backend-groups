@@ -16,9 +16,9 @@ import { Group } from '../models/group';
     });
   };
 
-  export const updateGroup = async (groupName?: string, newDisplayName?: string, newName?:string):Promise<Group | string> => {
+  export const updateGroup = async (groupName?: string, newDisplayName?: string, newName?:string):Promise<any> => {
     const groupRepository = connectDB.getRepository(Group);
-    let group:Group = groupRepository.findOne({where: {name: groupName}});
+    let group:Group = await groupRepository.findOne({where: {name: groupName}});
     if(group){
       if(newDisplayName){
         group.displayName = newDisplayName;
