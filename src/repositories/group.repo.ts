@@ -16,6 +16,10 @@ import { Group } from '../models/group';
     });
   };
 
+  export const updateGroup = async (newGroup: Group):Promise<Group> => {
+    return null;
+  }
+
   export const getGroupById = async (id: number): Promise<Group | null> => {
     const groupRepository = connectDB.getRepository(Group);
     const group = await groupRepository.findOne({where: {id: id}});
