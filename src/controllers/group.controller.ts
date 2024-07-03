@@ -4,8 +4,7 @@ import * as util from '../utils/app.utils';
 import {Group, GroupToUser} from '../models';
 import * as GroupRepo from '../repositories/group.repo';
 
-// let bearer:string = process.env.GROUP_AUTH
-let bearer:string = 'abcdefg';
+let bearer:string = process.env.GROUP_AUTH
 
 @Route("group")
 @Tags("group")
