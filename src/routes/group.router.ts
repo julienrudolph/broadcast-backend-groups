@@ -21,6 +21,12 @@ groupRouter.post("/removeGroupByName", async (req, res) => {
   return res.send(response);
 });
 
+groupRouter.post("/removeGroupById", async (req, res) => {
+  const controller = new GroupController();
+  const response = await controller.removeGroupById(req.headers, req.body);
+  return res.send(response);
+});
+
 groupRouter.post("/getGroupByName", async (req, res) => {
   const controller = new GroupController();
   const response = await controller.getUserByGroupName(req.headers, req.body);

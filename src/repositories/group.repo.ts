@@ -66,3 +66,19 @@ import { Group } from '../models/group';
       return "404 - no group found"
     }
   }
+  
+  export const deleteGroupById = async (id: number):Promise<any> => {
+    const groupRepository = connectDB.getRepository(Group);
+    const groupToUserRepo = connectDB.getRepository(GroupToUser);
+    let group:Group = await groupRepository.findOne({where: {id: id}});
+    if(group){
+      let groupToUser:GroupToUser[] = await groupToUserRepo.find({where: {groupId: group.id}});
+      if(groupToUser && groupToUser.length > 0){
+        return "501 - cannot delete non empty group";
+      }else{
+        return groupRepository.remove(group);
+      }
+    }else{
+      return "404 - no group found"
+    }
+  }

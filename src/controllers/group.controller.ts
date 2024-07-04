@@ -53,6 +53,14 @@ export default class GroupController {
     return null;
   }
 
+  @Post("/removeGroupById")
+  public async removeGroupById(@Body() body:any, @Header() header:any):Promise<any>{
+    if(this.isAuthenticated(header.authorization)){
+      return await GroupRepo.deleteGroupByName(body.id);
+    }
+    return null;
+  }
+
   // return group by name
   @Post("/getGroupByName")
   public async getUserByGroupName(@Body() body:any,@Header() header:any):Promise<any> {
