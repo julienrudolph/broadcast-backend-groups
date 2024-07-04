@@ -171,7 +171,7 @@ export default class RomanController {
           groups.map(elem => {
             message = message + "**/" + elem.name + "**\n" 
           }); 
-          message = message + "\n\n Nutzne Sie **/Gruppenname <Nachricht>** um eine Nachricht an alle Gruppenmitglieder zu versenden." 
+          message = message + "\n\n Nutzen Sie **/Gruppenname <Nachricht>** um eine Nachricht an alle Gruppenmitglieder zu versenden." 
           return ({type: 'text',
                     text: {
                       data: message
@@ -213,7 +213,6 @@ export default class RomanController {
         let groupName:string = tmp[0].substring(1,tmp[0].length);
         if(groupName) {
           let group = await GroupRepo.getGroupByName(groupName);
-          console.log(group);
           if(group){
             return this.handleGroupMessage(messageText.substring(groupName.length+2, messageText.length), group, appKey, userId);
           }else{
@@ -267,24 +266,27 @@ export default class RomanController {
     if(!group){
       return "Diese Gruppe konnte nicht gefunden werden. Verwenden Sie **/groups** um eine Übersicht der Gruppen zu erhalten."
     }else{
-      const userIds:GroupToUser[] = await GroupToUserRepo.getAllUserByGroupName(group.name);
+      const userIds = await GroupToUserRepo.getAllUserByGroupName(group.name);
       if(userIds && userIds.length > 0){
-        let result = [];
-        await Promise.all(
-          userIds.map(async (elem) => {
-            const user:ChannelToUser = await ChannelToUserRepo.getChannelToUserByUserId(elem.userId);
-            if(user.userToken){
-              result.push({
-                userToken: user.userToken,
-                conversationId: user.conversationId
-              });
-            }
-        }));
-        Promise.all(
-          result.map(async (elem) => {
-            await this.groupBroadcast(message, elem.userToken, elem.conversationId);
-          })
-        );
+        if(userIds != "error_no_members_found" && userIds != "error_no_group_found"){
+          let result = [];
+          await Promise.all(
+            userIds.map(async (elem) => {
+              const user:ChannelToUser = await ChannelToUserRepo.getChannelToUserByUserId(elem.userId);
+              if(user.userToken){
+                result.push({
+                  userToken: user.userToken,
+                  conversationId: user.conversationId
+                });
+              }
+          }));
+          console.log(result);
+          /*Promise.all(
+            result.map(async (elem) => {
+              await this.groupBroadcast(message, elem.userToken, elem.conversationId);
+            })
+          );*/
+        }
       }else{
         return "no users found for group - should be unpossible "
       }

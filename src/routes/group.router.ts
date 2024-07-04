@@ -29,7 +29,7 @@ groupRouter.post("/removeGroupById", async (req, res) => {
 
 groupRouter.post("/getGroupByName", async (req, res) => {
   const controller = new GroupController();
-  const response = await controller.getUserByGroupName(req.headers, req.body);
+  const response = await controller.getGroupByName(req.headers, req.body);
   if (!response) res.status(404).send({ message: "No group found" });
   return res.send(response);
 });

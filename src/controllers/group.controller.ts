@@ -63,7 +63,7 @@ export default class GroupController {
   }
 
   @Post("/getGroupByName")
-  public async getUserByGroupName(@Body() body:any,@Header() header:any):Promise<any> {
+  public async getGroupByName(@Header() header:any,@Body() body:any):Promise<any> {
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.getGroupByName(body.name);
     }else{
