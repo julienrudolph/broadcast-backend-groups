@@ -169,7 +169,7 @@ export default class RomanController {
           let message:String = "";
           message = "Anzahl Gruppen: " + groups.length + "\n\n";
           groups.map(elem => {
-            message = message + "**/" + elem.name + "**" 
+            message = message + "**/" + elem.name + "**\n" 
           }); 
           message = message + "\n\n Nutzne Sie **/Gruppenname <Nachricht>** um eine Nachricht an alle Gruppenmitglieder zu versenden." 
           return ({type: 'text',
@@ -356,6 +356,7 @@ export default class RomanController {
       "Ihnen stehen folgende Kommandos zur Verfügung.\n\n" +
       "**/help** - zeigt die Liste der Kommandos an\n " +
       "**/broadcast** <Nachricht> - erzeugt eine Broadcast Nachricht\n" +
+      "**/groups** - zeigt alle verfügbaren Gruppen an\n" +
       "**/info** - zeigt Informationen über den Kanal\n" + 
       "**/list** - zeigt Informationen der letzten 20 Broadcasts an\n" +
       "**/list** <Anzahl> - zeigt Informationen für die letzten <Anzahl> Ihrer Broadcasts an\n" +

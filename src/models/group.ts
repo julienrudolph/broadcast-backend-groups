@@ -1,6 +1,7 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  PrimaryColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -15,7 +16,7 @@ export class Group {
   @Column()
   botId!: string;
 
-  @Column()
+  @PrimaryColumn()
   name!: string;
 
   @Column()
