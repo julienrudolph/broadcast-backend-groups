@@ -9,7 +9,7 @@ groupRouter.get("/getGroup", async (_req, res) => {
   return res.send(response);
 });
 
-groupRouter.post("/addGroupTest", async (req, res) => {
+groupRouter.post("/addGroup", async (req, res) => {
   const controller = new GroupController();
   const response = await controller.addGroup(req.headers, req.body);
   return res.send(response);

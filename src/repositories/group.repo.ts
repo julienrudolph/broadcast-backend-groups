@@ -7,11 +7,13 @@ import { Group } from '../models/group';
     return groupRepository.find();
   };
   
-  export const createGroup = async (payload: Group): Promise<Group> => {
+  export const createGroup = async (payload: Group): Promise<Group | string> => {
     const groupRepository = connectDB.getRepository(Group);
-    const group = new Group();
+    const group = await groupRepository.findOne({where :{name: payload.name}});
+    if(group){
+      return "error_group_name_must_be_unique";
+    }
     return groupRepository.save({
-      ...group,
       ...payload,
     });
   };

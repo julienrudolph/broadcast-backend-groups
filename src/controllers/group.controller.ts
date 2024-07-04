@@ -36,7 +36,7 @@ export default class GroupController {
     }
   }
 
-  @Post("/addGroupTest")
+  @Post("/addGroup")
   public async addGroup(@Header() header:any, @Body() body:any):Promise<any>{
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.createGroup(body);
@@ -62,7 +62,6 @@ export default class GroupController {
     return "error_not_authenticated";
   }
 
-  // return group by name
   @Post("/getGroupByName")
   public async getUserByGroupName(@Body() body:any,@Header() header:any):Promise<any> {
     if(this.isAuthenticated(header.authorization)){

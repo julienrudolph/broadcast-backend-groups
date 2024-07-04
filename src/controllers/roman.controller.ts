@@ -272,7 +272,7 @@ export default class RomanController {
         let result = [];
         await Promise.all(
           userIds.map(async (elem) => {
-            const user:ChannelToUser = await ChannelToUserRepo.getChannelToUserByUserId(elem.id);
+            const user:ChannelToUser = await ChannelToUserRepo.getChannelToUserByUserId(elem.userId);
             if(user.userToken){
               result.push({
                 userToken: user.userToken,
