@@ -240,7 +240,7 @@ export default class RomanController {
           text: {
             data: 'Dies ist kein valides Kommando. Nutzen Sie /help um alle Kommandos anzuzeigen.'
           }
-        })
+        });
       
       }else{
         if(process.env.ENABLE_USER_RESPONSE === "false"){
@@ -268,7 +268,23 @@ export default class RomanController {
     }else{
       const userIds = await GroupToUserRepo.getAllUserByGroupName(group.name);
       if(userIds && userIds.length > 0){
-        if(userIds != "error_no_members_found" && userIds != "error_no_group_found"){
+        if(userIds == "error_no_members_found"){
+          return ({
+            type: 'text',
+            text: {
+              data: 'Diese Gruppe hat keine Mitlieder.'
+            }
+          });
+          
+        }  
+        if(userIds == "error_no_group_found"){
+          return ({
+            type: 'text',
+            text: {
+              data: 'Die Gruppe konnte unter dieser Bezeichnung nicht gefunden werden.'
+            }
+          });
+        }
           let result = [];
           await Promise.all(
             userIds.map(async (elem) => {
@@ -286,7 +302,7 @@ export default class RomanController {
               await this.groupBroadcast(message, elem.userToken, elem.conversationId);
             })
           );*/
-        }
+        
       }else{
         return "no users found for group - should be unpossible "
       }
