@@ -56,7 +56,8 @@ export default class GroupController {
   @Post("/removeGroupById")
   public async removeGroupById(@Body() body:any, @Header() header:any):Promise<any>{
     if(this.isAuthenticated(header.authorization)){
-      return await GroupRepo.deleteGroupByName(body.id);
+      console.log("id: " + body.id);
+      return await GroupRepo.deleteGroupById(body.id);
     }
     return "error_not_authenticated";
   }

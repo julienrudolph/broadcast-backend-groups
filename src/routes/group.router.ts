@@ -17,13 +17,13 @@ groupRouter.post("/addGroupTest", async (req, res) => {
 
 groupRouter.post("/removeGroupByName", async (req, res) => {
   const controller = new GroupController();
-  const response = await controller.removeGroup(req.headers, req.body);
+  const response = await controller.removeGroup(req.body, req.headers);
   return res.send(response);
 });
 
 groupRouter.post("/removeGroupById", async (req, res) => {
   const controller = new GroupController();
-  const response = await controller.removeGroupById(req.headers, req.body);
+  const response = await controller.removeGroupById( req.body, req.headers);
   return res.send(response);
 });
 

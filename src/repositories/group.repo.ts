@@ -67,13 +67,18 @@ import { Group } from '../models/group';
     }
   }
 
-  export const deleteGroupById = async (id: string):Promise<any> => {
+  export const deleteGroupById = async (id: number):Promise<any> => {
+    console.log(id);
     const groupRepository = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
 
-    let group:Group = await groupRepository.findOne({where: {id: (id as unknown) as number}});
+    let group:Group = await groupRepository.findOne({where: {id: id}});
+    console.log("Hier");
+    console.log(group);
     if(group){
+      
       let groupToUser:GroupToUser[] = await groupToUserRepo.find({where: {groupId: group.id}});
+      console.log(groupToUser);
       if(groupToUser && groupToUser.length > 0){
         return "501 - cannot delete non empty group";
       }else{
