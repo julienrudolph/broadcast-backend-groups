@@ -23,7 +23,7 @@ export default class GroupController {
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.getGroups();  
     }else{
-      return "401 - unauthorized";
+      return "error_not_authenticated";
     }
   }
 
@@ -32,16 +32,16 @@ export default class GroupController {
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.updateGroup(body.groupName, body.newDisplayname, body.newName);
     }else{
-      return "401 - unauthorized"
+      return "error_not_authenticated"
     }
   }
 
-  @Post("/addGroup")
+  @Post("/addGroupTest")
   public async addGroup(@Header() header:any, @Body() body:any):Promise<any>{
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.createGroup(body);
     }else{
-      return "401 - unauthorized"
+      return "error_not_authenticated"
     }
   }
 
@@ -50,7 +50,7 @@ export default class GroupController {
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.deleteGroupByName(body.name);
     }
-    return null;
+    return "error_not_authenticated";
   }
 
   @Post("/removeGroupById")
@@ -58,7 +58,7 @@ export default class GroupController {
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.deleteGroupByName(body.id);
     }
-    return null;
+    return "error_not_authenticated";
   }
 
   // return group by name
@@ -67,7 +67,7 @@ export default class GroupController {
     if(this.isAuthenticated(header.authorization)){
       return await GroupRepo.getGroupByName(body.name);
     }else{
-      return "401 - unauthorized";
+      return "error_not_authenticated";
     }
   }
 }

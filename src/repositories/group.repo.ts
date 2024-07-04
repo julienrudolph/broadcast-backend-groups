@@ -66,11 +66,12 @@ import { Group } from '../models/group';
       return "404 - no group found"
     }
   }
-  
-  export const deleteGroupById = async (id: number):Promise<any> => {
+
+  export const deleteGroupById = async (id: string):Promise<any> => {
     const groupRepository = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
-    let group:Group = await groupRepository.findOne({where: {id: id}});
+
+    let group:Group = await groupRepository.findOne({where: {id: (id as unknown) as number}});
     if(group){
       let groupToUser:GroupToUser[] = await groupToUserRepo.find({where: {groupId: group.id}});
       if(groupToUser && groupToUser.length > 0){
