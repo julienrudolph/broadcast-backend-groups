@@ -296,15 +296,29 @@ export default class RomanController {
                 });
               }
           }));
-          console.log(result);
-          /*Promise.all(
+          Promise.all(
             result.map(async (elem) => {
               await this.groupBroadcast(message, elem.userToken, elem.conversationId);
             })
-          );*/
+          ).then(async () => {
+            let newBroadcast: BroadCast = {
+              broadCastId: "1",
+              group: group.name,
+              message: message,
+              userId: userId
+            }
+            let broadcastEntry = await Broadcastrepo.createBroadcast(newBroadcast);
+            // Logger.logInfo(JSON.stringify(broadcastEntry));
+            return ({
+              type: 'text',
+              text: {
+                data: "Broadcast mit der ID " + broadcastEntry.id + " versendet."
+              }
+            });
+          });
         
       }else{
-        return "no users found for group - should be unpossible "
+        return "panic! - something is going horribly wrong"
       }
     }
   }
@@ -426,6 +440,7 @@ export default class RomanController {
       let result = await this.broadCastToWire(broadCastMessage, appKey).then(async (value:string) => {
         let newBroadcast:BroadCast = {
             broadCastId: value.split('"')[3],
+            group: "",
             message: message,
             userId: userId
           }

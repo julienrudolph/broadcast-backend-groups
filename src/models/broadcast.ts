@@ -11,10 +11,13 @@ export class BroadCast {
   id?: number;
 
   @Column()
-  broadCastId!: string;
+  broadCastId?: string;
 
   @Column()
   message!: string;
+
+  @Column(({nullable: true }))
+  group?: string;
 
   @CreateDateColumn()
   createdAt?: Date;
