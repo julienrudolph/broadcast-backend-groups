@@ -11,6 +11,7 @@ import * as GroupToUserRepo from '../repositories/groupToUser.repo';
 import * as Utils from '../utils/wirebackend.utils';
 import * as Logger from '../utils/logging.utils';
 import * as apputils from '../utils/app.utils';
+import {v4 as uuidv4} from 'uuid';
 
 import { BotUser, Channel, ChannelToUser, BroadCast, Whitelist, Group, GroupToUser } from '../models';
 
@@ -302,7 +303,7 @@ export default class RomanController {
             })
           ).then(async () => {
             let newBroadcast: BroadCast = {
-              broadCastId: "1",
+              broadCastId: uuidv4(),
               group: group.name,
               message: message,
               userId: userId
