@@ -1,12 +1,65 @@
 import { connectDB } from '../config/database';
 import { GroupToUser, BotUser, ChannelToUser, Group } from '../models';
 import * as groupRepo from '../repositories/group.repo';
+import * as userRepo from '../repositories/user.repo';
 import * as channelToUserRepo from '../repositories/channelToUser.repo';
 
   export const getAllGroupToUsers = async (): Promise<Array<GroupToUser>> => {
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     return groupToUserRepo.find();
   };
+
+  export const getAll = async (): Promise<any> => {
+    const groupRepo = connectDB.getRepository(Group);
+    const groupToUserRepo = connectDB.getRepository(GroupToUser);
+    const userRepo = connectDB.getRepository(BotUser); 
+
+    const groups:Group[] = await groupRepo.find();
+    const groupToUser:GroupToUser[] = await groupToUserRepo.find({
+      order: {
+        groupId: "ASC"
+      }
+    });
+    const users:BotUser[] = await userRepo.find();
+    if(groups && groupToUser && users){
+      let result:any[]=[];
+      groupToUser.map(elem => {
+        let tmp_group:Group = groups.find(group => group.id === elem.groupId);
+        let tmp_user:BotUser = users.find(user => user.id === elem.userId);
+        if(tmp_group){
+          if(!result.find(tmp => tmp.groupId === tmp_group.id)){
+            if(tmp_user){
+              result.push({
+                groupId: tmp_group.id,
+                groupName: tmp_group.name,
+                members: [{
+                  id: tmp_user.id,
+                  userId: tmp_user.userId,
+                  mail: tmp_user.email,
+                  displayName: tmp_user.displayName
+                }]
+              });
+            }
+          }else{
+            result.map(elem => {
+              if(elem.groupId === tmp_group.id){
+                elem.members.push({
+                  id: tmp_user.id,
+                  userId: tmp_user.userId,
+                  mail: tmp_user.email,
+                  displayName: tmp_user.displayName
+                })
+              }
+            });
+          }
+        }
+      });
+      return result;
+    }else{
+      return "error_something_went_wrong"
+    }
+
+  }
 
   export const getAllUserByGroupName = async (groupName: string): Promise<any> => {
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
@@ -50,6 +103,8 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
   };
 
   export const addUserToGroupByEmail = async(userMail:string, groupName:string):Promise<GroupToUser | string> => {
+    console.log(userMail);
+    console.log(groupName);
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
@@ -57,6 +112,9 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     let group:Group = await groupRepo.findOne({where: {name: groupName}});
     let user:BotUser = await botUserRepo.findOne({where: {email: userMail}});
     
+    console.log(user);
+    console.log(group);
+
     if(group && user){
       return groupToUserRepo.save({
         userId: user.id,
