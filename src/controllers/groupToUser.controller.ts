@@ -24,6 +24,13 @@ export default class GroupToUserController {
     }
   }
 
+  @Get("/getAllAvailiableUser")
+  public async getAllAvailiableUser(@Header() header:any):Promise<any>{
+    if(this.isAuthenticated(header.authorization)){
+      return await GroupToUserRepo.getAllAvailiableUsers();
+    }
+  }
+
   @Post("/getGroupmemberByGroupname")
   public async getGroupmemberByGroupname(@Body() body: any,@Header() header:any): Promise<any> {
     if(this.isAuthenticated(header.authorization)){

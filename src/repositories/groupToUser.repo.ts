@@ -9,6 +9,11 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     return groupToUserRepo.find();
   };
 
+  export const getAllAvailiableUsers = async (): Promise<any> => {
+    const botUserRepo = connectDB.getRepository(BotUser);
+    return botUserRepo.find();
+  }
+
   export const getAll = async (): Promise<any> => {
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
@@ -32,6 +37,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
               result.push({
                 groupId: tmp_group.id,
                 groupName: tmp_group.name,
+                displayName: tmp_group.displayName,
                 members: [{
                   id: tmp_user.id,
                   userId: tmp_user.userId,
@@ -58,7 +64,6 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     }else{
       return "error_something_went_wrong"
     }
-
   }
 
   export const getAllUserByGroupName = async (groupName: string): Promise<any> => {

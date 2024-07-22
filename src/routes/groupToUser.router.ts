@@ -9,6 +9,12 @@ groupToUserRouter.get("/getAll", async (req, res) => {
   return res.send(response);
 });
 
+groupToUserRouter.get("/getAllAvailiableUser", async (req, res) => {
+  const controller = new GroupToUserController();
+  const response = await controller.getAllAvailiableUser(req.header);
+  return res.send(response);
+});
+
 groupToUserRouter.post("/getGroupmemberByGroupname", async (req, res) => {
   const controller = new GroupToUserController();
   const response = await controller.getGroupmemberByGroupname(req.body, req.headers);
