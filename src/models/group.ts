@@ -14,7 +14,7 @@ export class Group {
   id?: number;
 
   @Column()
-  botId?: string;
+  botId!: string;
 
   @PrimaryColumn()
   name!: string;
