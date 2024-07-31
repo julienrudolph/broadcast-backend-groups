@@ -2,9 +2,14 @@ import { connectDB } from '../config/database';
 import { GroupToUser } from '../models';
 import { Group } from '../models/group';
 
-  export const getGroups = async (): Promise<Array<Group>> => {
+  export const getGroups = async (): Promise<any> => {
     const groupRepository = connectDB.getRepository(Group);
-    return groupRepository.find();
+    const groups = await groupRepository.find();
+    if(groups){
+      return groups 
+    }else{
+      return "error_no_groups_found";
+    }
   };
   
   export const createGroup = async (payload: Group): Promise<Group | string> => {
@@ -60,12 +65,12 @@ import { Group } from '../models/group';
     if(group){
       let groupToUser:GroupToUser[] = await groupToUserRepo.find({where: {groupId: group.id}});
       if(groupToUser && groupToUser.length > 0){
-        return "501 - cannot delete non empty group";
+        return "error_cannot_delete_non_empty_group";
       }else{
         return groupRepository.remove(group);
       }
     }else{
-      return "404 - no group found"
+      return "error_group_not_found"
     }
   }
 
@@ -75,18 +80,16 @@ import { Group } from '../models/group';
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
 
     let group:Group = await groupRepository.findOne({where: {id: id}});
-    console.log("Hier");
     console.log(group);
     if(group){
-      
       let groupToUser:GroupToUser[] = await groupToUserRepo.find({where: {groupId: group.id}});
       console.log(groupToUser);
       if(groupToUser && groupToUser.length > 0){
-        return "501 - cannot delete non empty group";
+        return "error_cannot_delete_non_empty_group";
       }else{
         return groupRepository.remove(group);
       }
     }else{
-      return "404 - no group found"
+      return "error_group_not_found"
     }
   }

@@ -19,50 +19,68 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const userRepo = connectDB.getRepository(BotUser); 
 
-    const groups:Group[] = await groupRepo.find();
+    
+
+    
     const groupToUser:GroupToUser[] = await groupToUserRepo.find({
       order: {
         groupId: "ASC"
       }
     });
-    const users:BotUser[] = await userRepo.find();
-    if(groups && groupToUser && users){
-      let result:any[]=[];
-      groupToUser.map(elem => {
-        let tmp_group:Group = groups.find(group => group.id === elem.groupId);
-        let tmp_user:BotUser = users.find(user => user.id === elem.userId);
-        if(tmp_group){
-          if(!result.find(tmp => tmp.groupId === tmp_group.id)){
-            if(tmp_user){
-              result.push({
-                groupId: tmp_group.id,
-                groupName: tmp_group.name,
-                displayName: tmp_group.displayName,
-                members: [{
-                  id: tmp_user.id,
-                  userId: tmp_user.userId,
-                  mail: tmp_user.email,
-                  displayName: tmp_user.displayName
-                }]
+   
+    if(!groupToUser){
+      return "error_while_getting_groupToUser";
+    }else if(groupToUser.length == 0){
+      return "no_groupToUser_relations_found";   
+    }else{
+      const users:BotUser[] = await userRepo.find();
+      const groups:Group[] = await groupRepo.find();
+      if(groups && users){
+        console.log("hier");
+        let result:any[]=[];
+        console.log(groupToUser);
+        groupToUser.map(elem => {
+          let tmp_group:Group = groups.find(group => group.id === elem.groupId);
+          let tmp_user:BotUser = users.find(user => user.id === elem.userId);
+          if(tmp_group){
+            if(!result.find(tmp => tmp.groupId === tmp_group.id)){
+              if(tmp_user){
+                result.push({
+                  groupId: tmp_group.id,
+                  groupName: tmp_group.name,
+                  displayName: tmp_group.displayName,
+                  members: [{
+                    id: tmp_user.id,
+                    userId: tmp_user.userId,
+                    mail: tmp_user.email,
+                    displayName: tmp_user.displayName
+                  }]
+                });
+              }
+            }else{
+              result.map(elem => {
+                if(elem.groupId === tmp_group.id){
+                  elem.members.push({
+                    id: tmp_user.id,
+                    userId: tmp_user.userId,
+                    mail: tmp_user.email,
+                    displayName: tmp_user.displayName
+                  })
+                }
               });
             }
-          }else{
-            result.map(elem => {
-              if(elem.groupId === tmp_group.id){
-                elem.members.push({
-                  id: tmp_user.id,
-                  userId: tmp_user.userId,
-                  mail: tmp_user.email,
-                  displayName: tmp_user.displayName
-                })
-              }
-            });
           }
+        });
+        return result;
+      }else{
+        if(!groups || groups.length == 0){
+          return "no_groups_could_be_found";
         }
-      });
-      return result;
-    }else{
-      return "error_something_went_wrong"
+        if(!users || users.length == 0 ){
+          return "no_users_found";
+        }
+        return "error_something_went_wrong";
+      }
     }
   }
 
@@ -108,17 +126,13 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
   };
 
   export const addUserToGroupByEmail = async(userMail:string, groupName:string):Promise<GroupToUser | string> => {
-    console.log(userMail);
-    console.log(groupName);
     const groupRepo = connectDB.getRepository(Group);
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const botUserRepo = connectDB.getRepository(BotUser);
 
     let group:Group = await groupRepo.findOne({where: {name: groupName}});
     let user:BotUser = await botUserRepo.findOne({where: {email: userMail}});
-    
-    console.log(user);
-    console.log(group);
+
 
     if(group && user){
       return groupToUserRepo.save({
@@ -126,7 +140,11 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
         groupId: group.id
       });
     }else{
-      return "error_user_or_group_not_found";
+      if(!group){
+        return "error_cannot_find_group";
+      }else{
+        return "error_cannot_find_user";
+      }
     }
   }
 
@@ -177,7 +195,11 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
         groupId: group.id
       });
     }else{
-      return "error_user_or_group_not_found";
+      if(!group){
+        return "error_cannot_find_group";
+      }else{
+        return "error_cannot_find_user";
+      }
     }  
   }
 
