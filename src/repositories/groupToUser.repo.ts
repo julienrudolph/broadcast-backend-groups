@@ -19,9 +19,6 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     const userRepo = connectDB.getRepository(BotUser); 
 
-    
-
-    
     const groupToUser:GroupToUser[] = await groupToUserRepo.find({
       order: {
         groupId: "ASC"
@@ -36,9 +33,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
       const users:BotUser[] = await userRepo.find();
       const groups:Group[] = await groupRepo.find();
       if(groups && users){
-        console.log("hier");
         let result:any[]=[];
-        console.log(groupToUser);
         groupToUser.map(elem => {
           let tmp_group:Group = groups.find(group => group.id === elem.groupId);
           let tmp_user:BotUser = users.find(user => user.id === elem.userId);

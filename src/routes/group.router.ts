@@ -19,7 +19,7 @@ groupRouter.post("/addGroup", async (req, res) => {
   if(typeof response === 'string'){
     return res.status(500).send(response);
   }else{
-    if(response instanceof Group){
+    if(response.id && response.createdAt){
       return res.send(response);
     }else{
       return res.status(500).send(response);
@@ -56,6 +56,7 @@ groupRouter.post("/getGroupByName", async (req, res) => {
   if (!response){ 
     return res.status(500).send({ message: "No group found" });
   }
+  return res.send(response);
 });
 
 export default groupRouter;
