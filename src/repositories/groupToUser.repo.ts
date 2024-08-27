@@ -82,10 +82,17 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
   export const getAllUserByGroupName = async (groupName: string): Promise<any> => {
     const groupToUserRepo = connectDB.getRepository(GroupToUser);
     let group:Group = await groupRepo.getGroupByName(groupName);
+    let result:any[] = []; 
     if(group){
       const members = await groupToUserRepo.find({where: {groupId: group.id}});
       if(members && members.length > 0){
-        return members;
+          result.push({
+            groupId: group.id,
+            groupName: group.name,
+            displayName: group.displayName,
+            members: members
+          });
+        return result;
       }else{
         return "error_no_members_found";
       }
