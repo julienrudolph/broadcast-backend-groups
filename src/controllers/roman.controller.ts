@@ -28,7 +28,6 @@ let romanBase = process.env.ROMAN_BASE;
 export default class RomanController {
   @Post("/")
   public async getRomanResponse(@Body() body: any, @Header() header: any ): Promise<any> {
-    console.log("26082024");
     romanBase = romanBase.endsWith('/') ? romanBase : `${romanBase}/`;
     const { type, userId, messageId, conversationId } = body;
     if(header.authorization === bearer){
@@ -166,7 +165,6 @@ export default class RomanController {
                 });        
       }else if(messageText.startsWith("/groups")){
         let groups = await this.getGroups();
-        console.log(groups);
         if(groups && groups.length > 0){
           let message:String = "";
           message = "Anzahl Gruppen: " + groups.length + "\n\n";
@@ -268,9 +266,9 @@ export default class RomanController {
     if(!group){
       return "Diese Gruppe konnte nicht gefunden werden. Verwenden Sie **/groups** um eine Übersicht der Gruppen zu erhalten."
     }else{
-      const userIds = await GroupToUserRepo.getAllUserByGroupName(group.name);
-      if(userIds && userIds.length > 0){
-        if(userIds == "error_no_members_found"){
+      const groupObject = await GroupToUserRepo.getAllUserByGroupName(group.name);
+      if(groupObject && groupObject.members && groupObject.members.length > 0){
+        if(groupObject == "error_no_members_found"){
           return ({
             type: 'text',
             text: {
@@ -279,7 +277,7 @@ export default class RomanController {
           });
           
         }  
-        if(userIds == "error_no_group_found"){
+        if(groupObject == "error_no_group_found"){
           return ({
             type: 'text',
             text: {
@@ -289,8 +287,8 @@ export default class RomanController {
         }
           let result = [];
           await Promise.all(
-            userIds.map(async (elem) => {
-              const user:ChannelToUser = await ChannelToUserRepo.getChannelToUserByUserId(elem.userId);
+            groupObject.members.map(async (elem) => {
+              const user:ChannelToUser = await ChannelToUserRepo.getChannelToUserByUserId(elem.id);
               if(user.userToken){
                 result.push({
                   userToken: user.userToken,
@@ -300,6 +298,7 @@ export default class RomanController {
           }));
           Promise.all(
             result.map(async (elem) => {
+              console.log(elem);
               await this.groupBroadcast(message, elem.userToken, elem.conversationId);
             })
           ).then(async () => {

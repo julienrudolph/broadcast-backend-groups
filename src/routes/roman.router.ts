@@ -5,7 +5,6 @@ const romanRouter = express.Router();
 
 romanRouter.post("/", async (req, res) => {
   const controller = new RomanController();
-  console.log("test");
   const response = await controller.getRomanResponse(req.body, req.headers);
   if(response === "user_not_allowed"){
     return res.status(409).send("user_not_allowed");
