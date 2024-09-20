@@ -96,7 +96,6 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
         await Promise.all(
           members.map(async elem => {
             const user:BotUser = await botUserRepo.findOne({where:{id: elem.userId}});
-            console.log(user);
             if(user){
               result.members.push({
                 id: user.id,
