@@ -19,21 +19,21 @@ export default class GroupToUserController {
 
   @Get("/getAll")
   public async getAll(@Header() header:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupToUserRepo.getAll();
     }
   }
 
   @Get("/getAllAvailiableUser")
   public async getAllAvailiableUser(@Header() header:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupToUserRepo.getAllAvailiableUsers();
     }
   }
 
   @Post("/getGroupmemberByGroupname")
   public async getGroupmemberByGroupname(@Body() body: any,@Header() header:any): Promise<any> {
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupToUserRepo.getAllUserByGroupName(body.groupName);
     }
     return "error_not_authenticated"
@@ -41,7 +41,7 @@ export default class GroupToUserController {
 
   @Post("/getGroupsOfUserByEmail")
   public async getGroupsOfUserByEmail(@Body() body: any, @Header() header:any): Promise<any> {
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return GroupToUserRepo.getAllGroupsByUserEmail(body.email);  
     }else{
       return "error_not_authenticated";
@@ -50,7 +50,7 @@ export default class GroupToUserController {
 
   @Post("/addUserToGroupByEmail")
   public async addUserToGroupByEmail(@Body() body:any, @Header() header:any): Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupToUserRepo.addUserToGroupByEmail(body.email, body.groupName);    
     }else{
       return "error_not_authenticated";
@@ -59,7 +59,7 @@ export default class GroupToUserController {
 
   @Post("/addUserToGroupByUserId")
   public async addUserToGroupByUserId(@Body() body: any, @Header() header:any): Promise<any> {
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupToUserRepo.addUserToGroupByUserId(body.userId, body.groupName);  
     }else{
       return "error_not_authenticated";
@@ -68,7 +68,7 @@ export default class GroupToUserController {
 
   @Post("/removeUserFromGroupByEmail")
   public async removeUserFromGroupByEmail(@Body() body:any,@Header() header:any):Promise<any> {
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return GroupToUserRepo.removeUserFromGroupByEmail(body.email, body.groupName);  
     }else{
       return "error_not_authenticated";
@@ -77,7 +77,7 @@ export default class GroupToUserController {
 
   @Post("/removeUserFromAllGroups")
   public async removeUserFromAllGroups(@Body() body:any,@Header() header:any):Promise<any> {
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return GroupToUserRepo.removeUserFromAllGroups(body.email);  
     }else{
       return "error_not_authenticated";

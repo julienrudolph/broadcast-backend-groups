@@ -20,7 +20,7 @@ export default class GroupController {
   // return all groups as json array of id and name
   @Get("/")
   public async getGroups(@Header() header:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupRepo.getGroups();  
     }else{
       return "error_not_authenticated";
@@ -29,7 +29,7 @@ export default class GroupController {
 
   @Post("/updateGroup")
   public async updateGroup(@Header() header:any, @Body() body:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupRepo.updateGroup(body.groupName, body.newDisplayname, body.newName);
     }else{
       return "error_not_authenticated"
@@ -38,7 +38,7 @@ export default class GroupController {
 
   @Post("/addGroup")
   public async addGroup(@Header() header:any, @Body() body:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupRepo.createGroup(body);
     }else{
       return "error_not_authenticated"
@@ -47,15 +47,15 @@ export default class GroupController {
 
   @Post("/removeGroupByName")
   public async removeGroup(@Body() body:any, @Header() header:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupRepo.deleteGroupByName(body.name);
     }
     return "error_not_authenticated";
-  }
+  } 
 
   @Post("/removeGroupById")
   public async removeGroupById(@Body() body:any, @Header() header:any):Promise<any>{
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       console.log("id: " + body.id);
       return await GroupRepo.deleteGroupById(body.id);
     }
@@ -64,7 +64,7 @@ export default class GroupController {
 
   @Post("/getGroupByName")
   public async getGroupByName(@Header() header:any,@Body() body:any):Promise<any> {
-    if(this.isAuthenticated(header.authorization)){
+    if(await this.isAuthenticated(header.authorization)){
       return await GroupRepo.getGroupByName(body.name);
     }else{
       return "error_not_authenticated";
