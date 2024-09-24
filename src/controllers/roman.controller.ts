@@ -159,8 +159,8 @@ export default class RomanController {
                                               "**/list** <Anzahl> - zeigt Informationen für die letzten <Anzahl> Broadcasts an\n" +
                                               "**/members** - zeigt alle Abonnenten des Kanals an\n" + 
                                               "**/stats** <ID> - zeigt die Statistiken des Broadcast mit der <ID> an\n" +
-                                              "**/stats** - zeigt die Statistik der letzten Broadcastnachricht\n\n" +
-                                              "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform)."
+                                              "**/stats** - zeigt die Statistik der letzten Broadcastnachricht\n\n"
+                                              // "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform)."
                                       }
                 });        
       }else if(messageText.startsWith("/groups")){
@@ -383,8 +383,8 @@ export default class RomanController {
     const helpMessageUser = "Sie haben den Kanal " + process.env.CHANNEL_NAME + " abonniert.\n\n" +
       "Ihnen stehen folgende Kommandos zur Verfügung.\n\n" +
       "**/help** - zeigt die Liste der Kommandos\n " +
-      "**/info** - zeigt Informationen über den Kanal\n\n" +
-      "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform).";
+      "**/info** - zeigt Informationen über den Kanal\n\n" 
+      // "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform).";
     const helpMessageAdmin = "Sie haben den Kanal " + process.env.CHANNEL_NAME + " abonniert. Sie sind Broadcaster.\n\n" +
       "Ihnen stehen folgende Kommandos zur Verfügung.\n\n" +
       "**/help** - zeigt die Liste der Kommandos an\n " +
@@ -395,8 +395,8 @@ export default class RomanController {
       "**/list** <Anzahl> - zeigt Informationen für die letzten <Anzahl> Ihrer Broadcasts an\n" +
       "**/members** - zeigt alle Abonnenten des Kanals an\n" + 
       "**/stats** <ID> - zeigt die Statistiken des Broadcast mit der <ID> an\n" +
-      "**/stats** - zeigt die Statistik der letzten Broadcastnachricht\n\n" +
-      "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform).";
+      "**/stats** - zeigt die Statistik der letzten Broadcastnachricht\n\n" 
+      // "Detailliertere Informationen finden Sie auf der [Lernplattform](https://gruppen.cducsu.de/sites/Lernplattform).";
     if(isAdmin){
       return ({type: 'text', text: {data: helpMessageAdmin}});  
     }else{
