@@ -24,7 +24,6 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
         groupId: "ASC"
       }
     });
-   
     if(!groupToUser){
       return "error_while_getting_groupToUser";
     }else if(groupToUser.length == 0){
@@ -66,6 +65,7 @@ import * as channelToUserRepo from '../repositories/channelToUser.repo';
             }
           }
         });
+        console.log(result);
         return result;
       }else{
         if(!groups || groups.length == 0){

@@ -5,7 +5,7 @@ const groupToUserRouter = express.Router();
 
 groupToUserRouter.get("/getAll", async (req, res) => {
   const controller = new GroupToUserController();
-  const response = await controller.getAll(req.header);
+  const response = await controller.getAll(req.headers);
   if(typeof response === 'string'){
     const tmp: String = response;
     if(tmp.startsWith("no")){
@@ -20,7 +20,7 @@ groupToUserRouter.get("/getAll", async (req, res) => {
 
 groupToUserRouter.get("/getAllAvailiableUser", async (req, res) => {
   const controller = new GroupToUserController();
-  const response = await controller.getAllAvailiableUser(req.header);
+  const response = await controller.getAllAvailiableUser(req.headers);
   return res.send(response);
 });
 
